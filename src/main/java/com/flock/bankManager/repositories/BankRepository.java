@@ -7,40 +7,39 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static com.flock.bankManager.utils.DBConstants.Queries.*;
 import static com.flock.bankManager.utils.DBConstants.Variables.*;
 
 @Repository
 public class BankRepository {
-    private final AtomicInteger updateCount = new AtomicInteger(0);
-    private final AtomicInteger transactionCount = new AtomicInteger(0);
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public void updateName(UpdateReq updateReq) {
+    public String updateName(UpdateReq updateReq) {
         MapSqlParameterSource params = new MapSqlParameterSource(SQL_EMAIL, updateReq.getEmail());
         params.addValue(SQL_NAME, updateReq.getName());
         jdbcTemplate.update(SQL_UPDATE_NAME, params);
-
-        System.out.println("Name Updated: " + updateCount.incrementAndGet());
+        return updateReq.getEmail();
     }
 
-    public void deposit(TransactionReq transactionReq) {
+    public String deposit(TransactionReq transactionReq) {
         MapSqlParameterSource params = new MapSqlParameterSource(SQL_EMAIL, transactionReq.getEmail());
         params.addValue(SQL_AMOUNT, transactionReq.getAmount());
         jdbcTemplate.update(SQL_DEPOSIT_AMT, params);
-
-        System.out.println("Money Deposited: " + transactionCount.incrementAndGet());
+        return transactionReq.getEmail();
     }
 
-    public void withdraw(TransactionReq transactionReq) {
+    public String withdraw(TransactionReq transactionReq) {
         MapSqlParameterSource params = new MapSqlParameterSource(SQL_EMAIL, transactionReq.getEmail());
         params.addValue(SQL_AMOUNT, transactionReq.getAmount());
         jdbcTemplate.update(SQL_WITHDRAW_AMT, params);
+        return transactionReq.getEmail();
+    }
 
-        System.out.println("Money Withdrew: " + transactionCount.decrementAndGet());
+    public void insertUser(UpdateReq updateReq) {
+        MapSqlParameterSource params = new MapSqlParameterSource(SQL_EMAIL, updateReq.getEmail());
+        params.addValue(SQL_NAME, updateReq.getName());
+        jdbcTemplate.update(SQL_INSERT_USER, params);
     }
 }

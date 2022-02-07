@@ -11,14 +11,14 @@ public class PriorityBasedExecutorService {
 
     private final ExecutorService priorityJobPoolExecutor;
     private final PriorityBlockingQueue<Task> priorityQueue;
-    private ExecutorService priorityJobScheduler
-            = Executors.newSingleThreadExecutor();
 
     public PriorityBasedExecutorService(Integer poolSize, Integer queueSize) {
         priorityJobPoolExecutor = Executors.newFixedThreadPool(poolSize);
         priorityQueue = new PriorityBlockingQueue<Task>(
                 queueSize,
                 Comparator.comparing(Task::getTaskPriority, Comparator.reverseOrder()));
+
+        ExecutorService priorityJobScheduler = Executors.newSingleThreadExecutor();
         priorityJobScheduler.execute(() -> {
             while (true) {
                 try {
