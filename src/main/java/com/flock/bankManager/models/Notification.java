@@ -12,7 +12,7 @@ public class Notification {
         this.update = update;
     }
 
-    public void print() {
-        System.out.println("Email: " + email + ", Notification: " + update);
+    public String stringify() {
+        return "Email: " + email + ", Notification: " + update;
     }
 }
